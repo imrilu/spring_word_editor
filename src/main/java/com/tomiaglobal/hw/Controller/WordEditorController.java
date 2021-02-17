@@ -1,7 +1,6 @@
-package com.tomiaglobal.hw;
+package com.tomiaglobal.hw.Controller;
 
-
-
+import com.tomiaglobal.hw.Model.WordEditor;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -15,7 +14,7 @@ public class WordEditorController {
     @GetMapping("/add")
     @ResponseBody
     public String add(@RequestParam(value = "s") String s,
-                           @RequestParam(value = "position", defaultValue = "-1") int position) {
+                      @RequestParam(value = "position", defaultValue = "-1") int position) {
         if (position == -1)
             wordEditor.add(s);
         else
@@ -42,7 +41,7 @@ public class WordEditorController {
     @GetMapping("/bold")
     @ResponseBody
     public String bold(@RequestParam(value = "fromPosition") int fromPosition,
-                         @RequestParam(value = "toPosition") int toPosition) {
+                       @RequestParam(value = "toPosition") int toPosition) {
         wordEditor.bold(fromPosition, toPosition);
         return wordEditor.print();
     }
@@ -74,7 +73,5 @@ public class WordEditorController {
     public String print() {
         return wordEditor.print();
     }
-
-
 
 }

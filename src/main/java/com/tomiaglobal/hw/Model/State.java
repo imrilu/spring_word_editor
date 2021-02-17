@@ -1,4 +1,4 @@
-package com.tomiaglobal.hw;
+package com.tomiaglobal.hw.Model;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -10,14 +10,9 @@ public class State {
 
     public State(StringBuilder text, List<Boolean> isBold, List<Boolean> isItalic, List<Boolean> isUnderline) {
         this.text = new StringBuilder(text);
-        this.isBold = new ArrayList<>();
-        this.isItalic = new ArrayList<>();
-        this.isUnderline = new ArrayList<>();
-        for (int i = 0; i < text.length(); i++) {
-            this.isBold.add(isBold.get(i));
-            this.isItalic.add(isItalic.get(i));
-            this.isUnderline.add(isUnderline.get(i));
-        }
+        this.isBold = new ArrayList<>(isBold);
+        this.isItalic = new ArrayList<>(isItalic);
+        this.isUnderline = new ArrayList<>(isUnderline);
     }
 
     public StringBuilder getText() {

@@ -1,4 +1,4 @@
-package com.tomiaglobal.hw;
+package com.tomiaglobal.hw.Model;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -21,7 +21,7 @@ public class WordEditor {
 
     public void add(String s) {
         addUndo();
-        clearRedo();
+        redos.clear();
         text.append(s);
         for (int i = 0; i < s.length(); i++) {
             isBold.add(false);
@@ -32,7 +32,7 @@ public class WordEditor {
 
     public void add(String s, int position) {
         addUndo();
-        clearRedo();
+        redos.clear();
         if (position > text.length())
             return;
         text.insert(position, s);
@@ -45,9 +45,8 @@ public class WordEditor {
 
     public void remove(int fromPosition, int toPosition) {
         addUndo();
-        if (fromPosition >= text.length() || toPosition > text.length() || fromPosition >= toPosition) {
+        if (fromPosition >= text.length() || toPosition > text.length() || fromPosition >= toPosition)
             return;
-        }
         text.delete(fromPosition, toPosition);
         for (int i = fromPosition; i < toPosition; i++) {
             isBold.remove(fromPosition);
@@ -74,14 +73,14 @@ public class WordEditor {
     public void redo() {
         if (!redos.empty()) {
             addUndo();
-            assignState(redos.remove(0));
+            loadState(redos.remove(0));
         }
     }
 
     public void undo() {
         if (!undos.empty()) {
             addRedo();
-            assignState(undos.remove(0));
+            loadState(undos.remove(0));
         }
     }
 
@@ -121,18 +120,38 @@ public class WordEditor {
         return str.toString();
     }
 
+    /**
+     * Helper method to add word editor's current state to undo list
+     */
     private void addUndo() {
         undos.add(0, new State(text, isBold, isItalic, isUnderline));
     }
 
+    /**
+     * Helper method to add word editor's current state to redo list
+     */
     private void addRedo() {
         redos.add(0, new State(text, isBold, isItalic, isUnderline));
     }
 
-    private void clearRedo() {
-        redos.clear();
+    /**
+     * Helper method to load the input state into current instance
+     * @param state The state to load into this instance
+     */
+    private void loadState(State state) {
+        text = new StringBuilder(state.getText());
+        isItalic = new ArrayList<>(state.getIsItalic());
+        isBold = new ArrayList<>(state.getIsBold());
+        isUnderline = new ArrayList<>(state.getIsUnderline());
     }
 
+    /**
+     * Helper method to switch boolean values on given list, from true to false and vice versa,
+     * from indices 'fromPosition' to 'toPosition'
+     * @param fromPosition start index
+     * @param toPosition end index
+     * @param list the list to perform the switch
+     */
     private void setBoolList(int fromPosition, int toPosition, List<Boolean> list) {
         if (fromPosition >= text.length() && toPosition >= text.length())
             return;
@@ -146,13 +165,5 @@ public class WordEditor {
             }
         }
     }
-
-    private void assignState(State state) {
-        text = new StringBuilder(state.getText());
-        isItalic = new ArrayList<>(state.getIsItalic());
-        isBold = new ArrayList<>(state.getIsBold());
-        isUnderline = new ArrayList<>(state.getIsBold());
-    }
-
 
 }
